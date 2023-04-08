@@ -24,3 +24,8 @@ then run join on worker :
 kubeadm join \<ip address\>:6443 --token \<token\> \  
 --discovery-token-ca-cert-hash \<sha256 hash\>  
   
+
+
+Use below cert-Manager for Rancher  
+==========  
+apply -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.yaml
