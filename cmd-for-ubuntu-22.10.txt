@@ -15,6 +15,6 @@ chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
 
-then run join :
+then run join on worker :
 kubeadm join <ip address>:6443 --token <token> \
         --discovery-token-ca-cert-hash <sha256 hash>
