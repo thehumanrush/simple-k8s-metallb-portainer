@@ -31,3 +31,4 @@ Watch view k8s component
 ========================
 watch -n5 "kubectl get pods -o wide --all-namespaces ; echo ; kubectl get nodes -o wide"
 watch -n5 "echo "k8s SERVICES :-" ; echo "==================" ; kubectl get services -o wide --all-namespaces ; echo ; echo ; echo "k8s DEPLOYMENT :-" ; echo "==================" ; kubectl get deployments -o wide --all-namespaces"
+
