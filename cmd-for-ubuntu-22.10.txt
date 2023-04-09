@@ -8,12 +8,15 @@ apt install -y kubeadm=1.23.17-00 kubelet=1.23.17-00 kubectl=1.23.17-00 kubernet
 
 run below on master only
 ==========
-kubeadm init --pod-network-cidr=192.168.0.0/16
+POD_CIDR=10.100.0.0/16
+kubeadm init --pod-network-cidr=${POD_CIDR}
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
+curl -s -o custom-resources.yaml https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
+sed -i "s@cidr: 192.168.0.0/16@cidr: ${POD_CIDR}@g" custom-resources.yaml
+kubectl create -f custom-resources.yaml
 
 then run join on worker
 ==========
