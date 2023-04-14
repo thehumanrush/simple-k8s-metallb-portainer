@@ -15,19 +15,23 @@ apt-mark hold kubelet kubeadm kubectl
 run below on master only :  
 ==========
 ```bash
-kubeadm init --pod-network-cidr=192.168.0.0/16
+POD_CIDR=10.100.0.0/16
+kubeadm init --pod-network-cidr=${POD_CIDR}
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
+curl -s -o /tmp/custom-resources.yaml https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
+sed -i "s@cidr: 192.168.0.0/16@cidr: ${POD_CIDR}@g" custom-resources.yaml
+kubectl create -f /tmp/custom-resources.yaml
+rm -f /tmp/custom-resources.yaml
 ```
 
 then run join on worker :  
 ==========  
 ```bash
 kubeadm join <ip address>:6443 --token <token> \
---discovery-token-ca-cert-hash <sha256 hash>
+        --discovery-token-ca-cert-hash <sha256 hash>
 ```
 
 
