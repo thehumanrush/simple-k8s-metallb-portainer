@@ -1,7 +1,13 @@
 # simple-kubernetes-cluster on Ubuntu 22.10  
-  
-Run below on both master and worker :  
-==========
+
+## Below is ansible-playbook to run
+```bash
+ansible-playbook site.yml -i inventory/my-k8s/hosts.ini
+```
+
+## Below is the summary of what above ansible playbook does
+
+### Run below on both master and worker :  
 ```bash
 apt install docker.io -y
 apt install apt-transport-https curl -y
@@ -12,8 +18,7 @@ apt install -y kubeadm=1.23.17-00 kubelet=1.23.17-00 kubectl=1.23.17-00 kubernet
 apt-mark hold kubelet kubeadm kubectl
 ```
   
-run below on master only :  
-==========
+### run below on master only :  
 ```bash
 POD_CIDR=10.100.0.0/16
 kubeadm init --pod-network-cidr=${POD_CIDR}
@@ -27,16 +32,14 @@ kubectl create -f /tmp/custom-resources.yaml
 rm -f /tmp/custom-resources.yaml
 ```
 
-then run join on worker :  
-==========  
+### then run join on worker :  
 ```bash
 kubeadm join <ip address>:6443 --token <token> \
         --discovery-token-ca-cert-hash <sha256 hash>
 ```
 
 
-Use below cert-Manager for Rancher  
-==========
+### Use below cert-Manager for Rancher  
 ```bash
 apply -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.yaml
 ```
