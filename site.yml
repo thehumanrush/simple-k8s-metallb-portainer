@@ -12,7 +12,7 @@
             apt install -y kubeadm=1.23.17-00 kubelet=1.23.17-00 kubectl=1.23.17-00 kubernetes-cni=1.1.1-00
             apt-mark hold kubelet kubeadm kubectl
 
-- hosts: master
+- hosts: master[0]
   gather_facts: true
   tasks:
   - name: Install Calico on Master
