@@ -32,6 +32,11 @@ kubectl create -f /tmp/custom-resources.yaml
 rm -f /tmp/custom-resources.yaml
 ```
 
+### Install MetalLB
+```bash
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-native.yaml
+```
+
 ### then run join on worker :  
 ```bash
 kubeadm join <ip address>:6443 --token <token> \
