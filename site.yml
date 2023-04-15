@@ -27,6 +27,10 @@
             sed -i "s@cidr: 192.168.0.0/16@cidr: {{ pod_cidr }}@g" /tmp/custom-resources.yaml
             kubectl create -f /tmp/custom-resources.yaml
             rm -f /tmp/custom-resources.yaml
+  
+  - name: Install MetalLB
+    become: yes
+    shell: kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-native.yaml
 
   - name: Get the token for joining the worker nodes
     become: yes
