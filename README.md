@@ -5,4 +5,11 @@
 ansible-playbook site.yml -i inventory/my-k8s/hosts.ini
 ```
 
-## Change your variable in inventory\my-k8s\group_vars\all.yml & host IP in inventory\my-k8s\hosts.ini
+## Change your variable in 
+```bash
+inventory\my-k8s\group_vars\all.yml
+```
+and host IP in
+```bash
+inventory\my-k8s\hosts.ini
+```
