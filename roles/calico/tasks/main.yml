@@ -1,0 +1,7 @@
+- name: Install Calico on Master
+  shell: |
+          kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
+          curl -s -o /tmp/custom-resources.yaml https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
+          sed -i "s@cidr: 192.168.0.0/16@cidr: {{ pod_cidr }}@g" /tmp/custom-resources.yaml
+          kubectl create -f /tmp/custom-resources.yaml
+          rm -f /tmp/custom-resources.yaml

@@ -1,0 +1,44 @@
+- name: Create volume config directory on first master
+  file:
+    path: /tmp/volume
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+# - name: Copy StorageClass manifest first master
+#   template:
+#     src: "sc.yml.j2"
+#     dest: /tmp/volume/sc.yml
+#     owner: "{{ ansible_user }}"
+#     group: "{{ ansible_user }}"
+#     mode: 0644
+
+- name: Copy PersistentVolume manifest first master
+  template:
+    src: "pv.yml.j2"
+    dest: /tmp/volume/pv.yml
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0644
+
+- name: apply StorageClass
+  command:
+    cmd: kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
+  changed_when: true
+
+- name: set default storage-class
+  shell: |
+          kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+- name: make folder for pv
+  command: mkdir -p /mnt/data
+
+- name: apply PersistentVolume
+  command:
+    cmd: kubectl apply -f /tmp/volume/pv.yml
+  changed_when: true
+
+- name: Clean up volume tmp dir
+  file:
+    path: /tmp/volume/
+    state: absent

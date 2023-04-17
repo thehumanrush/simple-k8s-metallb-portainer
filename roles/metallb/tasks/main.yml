@@ -1,0 +1,48 @@
+- name: add metallb repo to helm
+  command: helm repo add metallb https://metallb.github.io/metallb
+
+- name: update helm repo
+  command:
+    cmd: "helm repo update"
+  changed_when: true
+
+- name: check if metallb found in repo
+  command: helm search repo metallb
+  register: metallb_search_repo
+
+- name: Print search repo metallb
+  debug:
+    msg: "{{ metallb_search_repo.stdout }}"
+
+- name: Install metallb
+  command: helm upgrade --install metallb metallb/metallb --create-namespace --namespace metallb-system --wait
+
+- name: Sleep for 10 seconds and continue with play
+  ansible.builtin.wait_for:
+    timeout: 10
+  delegate_to: localhost
+
+- name: Create metallb config directory on first master
+  file:
+    path: /tmp/metallb
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Copy metallb address pool CR to first master
+  template:
+    src: "metallb-cr.yml.j2"
+    dest: /tmp/metallb/metallb-cr.yml
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0644
+
+- name: apply metallb LoadBalancer IP Service
+  command:
+    cmd: kubectl apply -f /tmp/metallb/metallb-cr.yml
+  changed_when: true
+
+- name: Clean up metallb tmp dir
+  file:
+    path: /tmp/metallb/
+    state: absent

@@ -1,0 +1,2 @@
+- name: Install Portainer
+  command: kubectl apply -n portainer -f https://downloads.portainer.io/ce2-17/portainer-lb.yaml
