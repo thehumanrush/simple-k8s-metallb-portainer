@@ -41,7 +41,7 @@
 - hosts: master[0]
   become: true
   roles:
-    - role: persistentvolume
+    - role: provisioner
 
 - hosts: master[0]
   become: true

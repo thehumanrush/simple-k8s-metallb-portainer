@@ -1,2 +1,12 @@
+- name: Add portainer helm repo
+  command: helm repo add portainer https://portainer.github.io/k8s/
+
+- name: Update Repo
+  command: helm repo update
+
 - name: Install Portainer
-  command: kubectl apply -n portainer -f https://downloads.portainer.io/ce2-17/portainer-lb.yaml
+  shell: |
+          helm upgrade --install --create-namespace -n portainer portainer portainer/portainer \
+          --set service.type=LoadBalancer \
+          --set tls.force=true \
+          --set persistence.storageClass=local-path

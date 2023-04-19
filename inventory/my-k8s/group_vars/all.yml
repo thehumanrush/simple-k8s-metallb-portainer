@@ -6,4 +6,4 @@ ansible_user: root
 pod_cidr: 10.100.0.0/16
 
 # metallb ip range for load balancer
-metal_lb_ip_range: "192.168.0.80-192.168.0.90"
+metal_lb_ip_range: "192.168.43.80-192.168.43.90"
